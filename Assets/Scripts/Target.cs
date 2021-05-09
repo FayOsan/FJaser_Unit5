@@ -32,14 +32,14 @@ public class Target : MonoBehaviour
 
     void RandomForce()
     {
-        targetRB.AddForce(Vector3.up * Random.Range(minForce, maxForce), 
+        targetRB.AddForce(Vector3.up * Random.Range(minForce, maxForce),
             ForceMode.Impulse);
     }
 
     void RandomTorque()
     {
-        targetRB.AddTorque(Random.Range(minTorque, maxTorque), 
-            Random.Range(minTorque, maxTorque), 
+        targetRB.AddTorque(Random.Range(minTorque, maxTorque),
+            Random.Range(minTorque, maxTorque),
             Random.Range(minTorque, maxTorque), ForceMode.Impulse);
     }
 
@@ -50,13 +50,20 @@ public class Target : MonoBehaviour
 
     private void OnMouseDown()
     {
-        gameManager.UpdateScore(pointValue);
-        Instantiate(exParticle, transform.position, exParticle.transform.rotation);
-        Destroy(gameObject);
+        if (gameManager.gameActive)
+        {
+            gameManager.UpdateScore(pointValue);
+            Instantiate(exParticle, transform.position, exParticle.transform.rotation);
+            Destroy(gameObject);
+        }
     }
 
     private void OnTriggerEnter(Collider other)
     {
         Destroy(gameObject);
+        if (!gameObject.CompareTag("Hazard"))
+        {
+            gameManager.GameOver();
+        }
     }
 }
